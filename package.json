@@ -2,11 +2,11 @@
   "name": "reestock",
   "version": "1.0.0",
   "description": "An e-commerce web application API",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "start": "node src/index.js"
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.ts",
+    "start": "node dist/index.js"
   },
   "keywords": [
     "Ecommerce"
@@ -15,21 +15,25 @@
   "license": "ISC",
   "homepage": "",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/Message-Akunna/reestock/issues"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "env-cmd": "^10.1.0",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
     "validator": "^13.11.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.4",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "nodemon": "^3.0.2",
     "prettier": "^3.1.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }
