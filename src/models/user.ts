@@ -1,5 +1,7 @@
 "use strict";
 import { CreationOptional, Model, Optional, UUIDV4 } from "sequelize";
+import { compare, hashSync } from "bcryptjs";
+//
 import { UserAttributes } from "@/src/utils/interface";
 import { ACCOUNT_STATUS, ROLES } from "../utils/constants";
 
@@ -12,12 +14,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare surname: string;
     declare firstname: string;
     declare email: string;
+    declare phoneNumber: string;
     declare password: string;
+    declare tokenRef: string | undefined;
+    declare avatar?: string | undefined;
+    declare lastLogin: Date | undefined;
     declare role: keyof typeof ROLES | undefined;
     declare status: keyof typeof ACCOUNT_STATUS | undefined;
-    declare lastLogin: Date | undefined;
-    declare token: string | undefined;
-    declare avatar?: string | undefined;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -25,8 +28,21 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     static associate(models: any) {
       // define association here
+      User.hasMany(models.Order, {
+        as: "orders",
+        foreignKey: "userId",
+        onDelete: "CASCADE",
+      }); // This will add a userId attribute to Order to hold the primary key value for User
+    }
+    async checkPassword(password: string) {
+      try {
+        return await compare(password, this.password);
+      } catch (error) {
+        throw error;
+      }
     }
   }
+
   User.init(
     {
       id: {
@@ -43,11 +59,22 @@ module.exports = (sequelize: any, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: { name: "unique_email", msg: "User with email already exists" },
+      },
+      phoneNumber: {
+        type: DataTypes.CHAR(20),
+        allowNull: false,
+        unique: {
+          name: "unique_phoneno",
+          msg: "User with phone number already exists",
+        },
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+        set(val: string) {
+          return this.setDataValue("password", hashSync(val));
+        },
       },
       role: {
         type: DataTypes.ENUM,
@@ -64,7 +91,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: true,
         defaultValue: DataTypes.NOW,
       },
-      token: {
+      tokenRef: {
         type: DataTypes.CHAR,
         allowNull: true,
       },

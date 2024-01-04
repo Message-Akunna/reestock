@@ -1,8 +1,13 @@
 "use strict";
 import { Model } from "sequelize";
 import { ORDER_STATUS, DELIVERY_TYPES } from "../utils/constants";
+import { OrderAttributes } from "../utils/interface";
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Order extends Model {
+  class Order extends Model<OrderAttributes> implements OrderAttributes {
+    declare id: number;
+    declare orderTotal: number;
+    declare status?: keyof typeof ORDER_STATUS;
+    declare deliveryType: keyof typeof DELIVERY_TYPES;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,12 +16,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static associate(models: any) {
       // define association here
       Order.belongsTo(models.User, {
+        as: "orders",
         foreignKey: "userId",
         onDelete: "CASCADE",
       }); // This will add a userId attribute to Order to hold the
       Order.belongsTo(models.Address, {
         foreignKey: "addressId",
-        onDelete: "CASCADE",
+        onDelete: "SET NULL",
       }); // This will add an addressId attribute to Order to hold the primary key value for Address
     }
   }

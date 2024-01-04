@@ -1,11 +1,19 @@
 "use strict";
 import { Model } from "sequelize";
 import slugify from "slugify";
+import { CategoryAttributes } from "../utils/interface";
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Category extends Model {
-    declare slug: string;
+  class Category
+    extends Model<CategoryAttributes>
+    implements CategoryAttributes
+  {
+    declare id: number;
     declare name: string;
+    declare slug: string;
+    declare imageUrl: string | null;
+    declare categoryId: number | null;
+    declare description: string | null;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.

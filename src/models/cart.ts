@@ -1,7 +1,9 @@
 "use strict";
 import { Model } from "sequelize";
+import { CartAttributes } from "../utils/interface";
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Cart extends Model {
+  class Cart extends Model<CartAttributes> implements CartAttributes {
+    declare id: number;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.

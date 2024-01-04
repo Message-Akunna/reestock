@@ -1,7 +1,13 @@
 "use strict";
 import { Model } from "sequelize";
+import { OrderItemAttributes } from "../utils/interface";
 module.exports = (sequelize: any, DataTypes: any) => {
-  class OrderItem extends Model {
+  class OrderItem
+    extends Model<OrderItemAttributes>
+    implements OrderItemAttributes
+  {
+    declare id: number;
+    declare quantity: number;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.

@@ -1,8 +1,14 @@
 "use strict";
 import { Model } from "sequelize";
 import { PAYMENT_STATUS } from "../utils/constants";
+import { PaymentAttributes } from "../utils/interface";
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Payment extends Model {
+  class Payment extends Model<PaymentAttributes> implements PaymentAttributes {
+    declare id: number;
+    declare amount: number;
+    declare trans_ref: string;
+    declare transactionId: number | null;
+    declare status: keyof typeof PAYMENT_STATUS;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.

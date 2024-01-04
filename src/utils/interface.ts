@@ -6,16 +6,21 @@ import {
   PAYMENT_STATUS,
 } from "@/src/utils/constants";
 
+export interface CustomError extends Error {
+  httpStatusCode?: number;
+}
+
 export interface UserAttributes {
   id: string;
   surname: string;
   firstname: string;
   email: string;
+  phoneNumber: string;
   password: string;
   role?: keyof typeof ROLES;
   status?: keyof typeof ACCOUNT_STATUS;
   lastLogin?: Date;
-  token?: string;
+  tokenRef?: string;
   avatar?: string;
 }
 
@@ -93,6 +98,16 @@ export interface TagAttributes {
   description: string | null;
 }
 
+export interface ProductTagAttributes {
+  tagId: number;
+  productId: number;
+}
+
 export interface TrackingAttributes {
   id: number;
+}
+
+export interface ListParamsInt {
+  limit: number;
+  page: number;
 }

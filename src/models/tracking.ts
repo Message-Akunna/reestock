@@ -1,7 +1,12 @@
-'use strict';
+"use strict";
 import { Model } from "sequelize";
+import { TrackingAttributes } from "../utils/interface";
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Tracking extends Model {
+  class Tracking
+    extends Model<TrackingAttributes>
+    implements TrackingAttributes
+  {
+    declare id: number;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.

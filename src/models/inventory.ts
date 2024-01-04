@@ -1,7 +1,15 @@
-'use strict';
+"use strict";
 import { Model } from "sequelize";
+import { InventoryAttributes } from "../utils/interface";
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Inventory extends Model {
+  class Inventory
+    extends Model<InventoryAttributes>
+    implements InventoryAttributes
+  {
+    declare id: number;
+    declare quantity: number;
+    declare reorderLevel: number;
+    declare reorderQuantity: number;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
