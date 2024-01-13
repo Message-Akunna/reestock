@@ -101,7 +101,10 @@ export const login = async (
         email: email,
       },
     });
-    if (!user) throw new AuthenticationError("User with email not found, please register to get an account");
+    if (!user)
+      throw new AuthenticationError(
+        "User with email not found, please register to get an account"
+      );
     if (!(await user.checkPassword(password)))
       throw new AuthenticationError("Login credentials not correct");
     return {
@@ -114,10 +117,13 @@ export const login = async (
   }
 };
 
-export const update = async (id: string, body: Record<string, string>) => {
+export const update = async (
+  userId: string | undefined,
+  body: Record<string, string>
+) => {
   try {
     return await db.sequelize.transaction(async (transaction: Transaction) => {
-      let user = await db.User.findByPk(id, {
+      let user = await db.User.findByPk(userId, {
         attributes: ["id", "tokenRef"],
       });
       if (!user) throw new NotFoundError("User not found");
@@ -136,11 +142,11 @@ export const update = async (id: string, body: Record<string, string>) => {
 };
 
 export const changePassword = async (
-  id: string,
+  userId: string | undefined,
   body: Record<string, string>
 ) => {
   try {
-    let user = await db.User.findByPk(id, {
+    let user = await db.User.findByPk(userId, {
       attributes: ["password", "tokenRef"],
     });
     if (!user) throw new NotFoundError("user not found");
@@ -152,7 +158,7 @@ export const changePassword = async (
     else if (newPassword !== confirmNewPassword)
       throw new AuthenticationError("Passwords do not matched");
 
-    await db.User.update({ password: newPassword }, { where: { id } });
+    await db.User.update({ password: newPassword }, { where: { userId } });
 
     return {
       success: true,
@@ -189,16 +195,16 @@ export const list = async ({
       transaction,
     });
     return {
+      page,
+      limit,
+      pageCount,
       success: true,
       data: allUsers,
-      page,
-      pageCount,
-      limit,
     };
   });
 };
 
-export const view = async (userId: string) => {
+export const view = async (userId?: string) => {
   const user = await db.User.findByPk(userId, {
     attributes: [
       "id",
@@ -214,13 +220,13 @@ export const view = async (userId: string) => {
   if (!user) throw new NotFoundError("Users not found");
 
   return {
+    data: user,
     success: true,
     message: "User's details fetched successfully",
-    data: user,
   };
 };
 
-export const remove = async (userId: string) => {
+export const remove = async (userId?: string) => {
   const user = await db.User.findByPk(userId);
   if (!user) throw new NotFoundError("User not found");
   await user.destroy();

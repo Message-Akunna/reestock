@@ -59,7 +59,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       modelName: "Tag",
       tableName: "tag",
       hooks: {
-        beforeCreate: (tag, options) => {
+        beforeValidate: (tag, options) => {
           tag.slug = slugify(tag.name, {
             lower: true, // convert to lower case
             strict: true, // remove special characters

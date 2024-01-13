@@ -20,7 +20,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Address.belongsTo(models.User, {
         foreignKey: "userId",
         onDelete: "CASCADE",
-      }); // This will add a userId attribute to Order to hold the
+      }); // This will add a userId attribute to Address to hold the address
     }
   }
   Address.init(

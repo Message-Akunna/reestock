@@ -111,3 +111,11 @@ export interface ListParamsInt {
   limit: number;
   page: number;
 }
+
+export interface SearchParamsInt {
+  limit?: number;
+  page?: number;
+  phrase?: number;
+  maxPrice?: number;
+  minPrice?: number;
+}

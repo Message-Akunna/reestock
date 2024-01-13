@@ -21,8 +21,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
 export async function update(req: Request, res: Response, next: NextFunction) {
   try {
-    const { userId, ...data } = req.body;
-    res.status(200).json(await service.update(userId, data));
+    res.status(200).json(await service.update(req.user?.id, req.body));
   } catch (error) {
     next(error);
   }
@@ -61,8 +60,7 @@ export async function changePassword(
   next: NextFunction
 ) {
   try {
-    const { userId, ...data } = req.body;
-    res.status(200).json(await service.changePassword(userId, data));
+    res.status(200).json(await service.changePassword(req.user?.id, req.body));
   } catch (error) {
     next(error);
   }

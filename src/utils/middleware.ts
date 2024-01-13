@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import {
-    decodeJwt,
-    errorMessage,
-    InvalidTokenError,
-    AuthenticationError,
+  decodeJwt,
+  errorMessage,
+  InvalidTokenError,
+  AuthenticationError,
 } from "iyasunday";
 //
 import { ROLES } from "./constants";
@@ -25,7 +25,7 @@ export const guard = () => {
 
       if (!tokenRef) throw new InvalidTokenError("Invalid token supplied");
       const user = await getUserWithToken(tokenRef);
-      req.body.userId = user.id;
+      req.user = user;
 
       return next();
     } catch (error) {
@@ -51,8 +51,9 @@ export const adminGuard = () => {
 
       if (!tokenRef) throw new InvalidTokenError("Invalid token supplied");
       const user = await getUserWithToken(tokenRef);
-      if(user.role !== ROLES.ADMIN) throw new AuthenticationError("Permission denied")
-      req.body.userId = user.id;
+      if (user.role !== ROLES.ADMIN)
+        throw new AuthenticationError("Permission denied");
+      req.user = user;
 
       return next();
     } catch (error) {
@@ -62,6 +63,5 @@ export const adminGuard = () => {
     }
   };
 };
-
 
 export default { guard, adminGuard };

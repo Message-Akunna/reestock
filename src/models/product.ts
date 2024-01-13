@@ -1,7 +1,7 @@
 "use strict";
 import { Model } from "sequelize";
 import slugify from "slugify";
-// 
+//
 import { ProductAttributes } from "@/src/utils/interface";
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -27,6 +27,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
           name: "categoryId",
           allowNull: true,
         },
+        as: "category",
         onDelete: "SET NULL",
       });
       Product.belongsToMany(models.Tag, {
@@ -46,6 +47,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       name: {
         type: DataTypes.CHAR(50),
         allowNull: false,
+        unique: {
+          name: "unique_product",
+          msg: "Product with this name already exist",
+        },
       },
 
       brandName: {
@@ -84,11 +89,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
     },
     {
-      sequelize,
       modelName: "Product",
       tableName: "product",
       hooks: {
-        beforeCreate: (product, options) => {
+        beforeValidate: (product, options) => {
           product.slug = slugify(product.name, {
             lower: true, // convert to lower case
             strict: true, // remove special characters
@@ -96,6 +100,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
           });
         },
       },
+      sequelize,
     }
   );
   return Product;

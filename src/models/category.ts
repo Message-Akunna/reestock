@@ -30,6 +30,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "categoryId",
         as: "Children",
       });
+      Category.hasMany(models.Product, {
+        foreignKey: "categoryId",
+      });
     }
   }
   Category.init(
@@ -45,7 +48,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         unique: {
           name: "unique_category",
-          msg: `Category name already exists`,
+          msg: "Category with this name already exist",
         },
       },
 
@@ -73,7 +76,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       modelName: "Category",
       tableName: "category",
       hooks: {
-        beforeCreate: (category, options) => {
+        beforeValidate: (category, options) => {
           category.slug = slugify(category.name, {
             lower: true, // convert to lower case
             strict: true, // remove special characters

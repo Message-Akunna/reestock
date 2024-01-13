@@ -30,21 +30,21 @@ route.patch(
 // admin route
 route.delete(
   "/user/:userId",
-  joiValidator(validation.remove),
   adminGuard(),
+  joiValidator(validation.remove),
   controller.remove
 );
 
 route.get(
   "/user/:userId",
-  joiValidator(validation.view),
   adminGuard(),
+  joiValidator(validation.view),
   controller.view
 );
 route.get(
   "/users/list",
-  joiValidator(validation.listUsers),
   adminGuard(),
+  joiValidator(validation.listUsers),
   controller.list
 );
 

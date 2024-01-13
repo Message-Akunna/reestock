@@ -34,7 +34,6 @@ export default {
   update: {
     body: {
       schema: Joi.object({
-        userId: Joi.string().required(),
         firstname: Joi.string().trim().max(50).lowercase(),
         surname: Joi.string().max(50).trim().lowercase(),
         phoneNumber: Joi.string().max(15).trim(),
@@ -54,7 +53,6 @@ export default {
   changePassword: {
     body: {
       schema: Joi.object({
-        userId: Joi.string().required(),
         oldPassword: Joi.string().required(),
         newPassword: Joi.string().required(),
         confirmNewPassword: Joi.any()
