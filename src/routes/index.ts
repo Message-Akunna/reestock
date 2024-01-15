@@ -3,6 +3,7 @@ import { errorMessage } from "iyasunday";
 // modules
 import TagEndpoint from "../modules/tag";
 import UserEndpoint from "../modules/user";
+import CartEndpoint from "../modules/cart";
 import ProductEndpoint from "../modules/product";
 import CategoryEndpoint from "../modules/category";
 import fileManagerEndpoints from "../modules/file";
@@ -14,6 +15,7 @@ export default (app: Express) => {
   //
   app.use(apiVersion, TagEndpoint);
   app.use(apiVersion, UserEndpoint);
+  app.use(apiVersion, CartEndpoint); 
   app.use(apiVersion, ProductEndpoint);
   app.use(apiVersion, CategoryEndpoint);
   app.use(apiVersion, fileManagerEndpoints);

@@ -9,35 +9,31 @@ import { Transaction, col, fn } from "sequelize";
 //
 import db from "../../models";
 
-export const create = async (body: {
-  name: string;
-  slug: string;
-  categoryId: any;
-}) => {
+export const create = async (body: Record<string, any>) => {
   return await db.sequelize.transaction(async (transaction: Transaction) => {
-    let categories = await db.Category.findOne({
+    let category = await db.Category.findOne({
       where: { name: body.name },
       attributes: ["id"],
       transaction,
     });
-    if (categories)
+    if (category)
       throw new ExistsError(`${body.name} already exists in categories`);
     if (body.categoryId) {
-      categories = await db.Category.findByPk(body.categoryId, {
+      category = await db.Category.findByPk(body.categoryId, {
         attributes: ["name"],
         transaction,
       });
-      if (!categories) throw new NotFoundError("Invalid category sent");
+      if (!category) throw new NotFoundError("Invalid category sent");
     }
 
-    categories = await db.Category.create(body, {
+    category = await db.Category.create(body, {
       transaction,
       individualHooks: true,
     });
     return {
       success: true,
       message: `${body.name} created successfully`,
-      data: categories,
+      data: category,
     };
   });
 };

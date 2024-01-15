@@ -9,11 +9,7 @@ import { Op, Transaction, col, fn } from "sequelize";
 //
 import db from "../../models";
 
-export const create = async (body: {
-  name: string;
-  slug: string;
-  tagId: any;
-}) => {
+export const create = async (body: Record<string, any>) => {
   return await db.sequelize.transaction(async (transaction: Transaction) => {
     let tags = await db.Tag.findOne({
       where: { name: body.name },
@@ -21,13 +17,6 @@ export const create = async (body: {
       transaction,
     });
     if (tags) throw new ExistsError(`${body.name} already exists in tags`);
-    if (body.tagId) {
-      tags = await db.Tag.findByPk(body.tagId, {
-        attributes: ["name"],
-        transaction,
-      });
-      if (!tags) throw new NotFoundError("Invalid tag sent");
-    }
 
     tags = await db.Tag.create(body, {
       transaction,
@@ -143,6 +132,13 @@ export const listTagProducts = async (
             [Op.in]: [tag.name], // replace with your tags
           },
         },
+        attributes: ["name", "slug", "id"],
+        through: { attributes: [] },
+        required: true,
+      },
+      {
+        model: db.Tag,
+        as: "tags",
         attributes: ["name", "slug", "id"],
         through: { attributes: [] },
       },
