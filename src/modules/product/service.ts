@@ -32,6 +32,23 @@ export async function create(
       individualHooks: true,
     });
 
+    if (body.tags) {
+      // Create tags and associations
+      for (let tagName of body.tags) {
+        // Find or create the tag
+        const [tag] = await db.Tag.findOrCreate({
+          where: { name: tagName },
+          transaction,
+        });
+
+        // Create the association
+        await db.ProductTag.create(
+          { productId: product.id, tagId: tag.id },
+          { transaction }
+        );
+      }
+    }
+
     return {
       success: true,
       message: `Product created successfully`,
@@ -63,6 +80,23 @@ export async function update(productId: string, body: Record<string, string>) {
         }
       }
       product = await product.update(body, { transaction });
+
+      if (body.tags) {
+        // Create tags and associations
+        for (let tagName of body.tags) {
+          // Find or create the tag
+          const [tag] = await db.Tag.findOrCreate({
+            where: { name: tagName },
+            transaction,
+          });
+
+          // Create the association
+          await db.ProductTag.create(
+            { productId: product.id, tagId: tag.id },
+            { transaction }
+          );
+        }
+      }
 
       return {
         success: true,
@@ -103,6 +137,12 @@ export async function list(query: any) {
           model: db.Category,
           as: "category",
           attributes: ["name", "slug", "id"],
+        },
+        {
+          model: db.Tag,
+          as: "tags",
+          attributes: ["name", "slug", "id"],
+          through: { attributes: [] },
         },
       ],
       limit: limit,
@@ -163,6 +203,12 @@ export async function search({
         as: "category",
         attributes: ["name", "slug", "id"],
       },
+      {
+        model: db.Tag,
+        as: "tags",
+        attributes: ["name", "slug", "id"],
+        through: { attributes: [] },
+      },
     ],
   });
 
@@ -187,12 +233,19 @@ export async function singleProduct(slug: string, showRelatedProducts = false) {
         as: "category",
         attributes: ["name", "slug", "id"],
       },
+      {
+        model: db.Tag,
+        as: "tags",
+        attributes: ["name", "slug", "id"],
+        through: { attributes: [] },
+      },
     ],
   });
   if (!product) throw new NotFoundError("Products not found");
 
   return {
     success: true,
+    message: "products fetched successfully",
     data: product,
   };
 }

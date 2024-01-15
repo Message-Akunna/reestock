@@ -32,6 +32,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       });
       Product.belongsToMany(models.Tag, {
         through: "product_tag",
+        as: "tags",
         onDelete: "CASCADE",
       });
     }

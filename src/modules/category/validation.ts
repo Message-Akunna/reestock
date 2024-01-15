@@ -33,7 +33,7 @@ export default {
     body: {
       schema: Joi.object({
         name: Joi.string().trim().max(30).required().lowercase(),
-        imageUrl: Joi.string(),
+        image_url: Joi.string(),
         categoryId: Joi.string(),
       }),
     },

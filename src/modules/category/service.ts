@@ -157,8 +157,6 @@ export const listCategoryProducts = async (
     },
   });
 
-  console.log(totalProductCount);
-
   const { offset, pageCount } = paginate(totalProductCount, page, limit);
 
   let categoryProducts = await db.Product.findAll({
@@ -168,6 +166,12 @@ export const listCategoryProducts = async (
         model: db.Category,
         as: "category",
         attributes: ["name", "slug", "id"],
+      },
+      {
+        model: db.Tag,
+        as: "tags",
+        attributes: ["name", "slug", "id"],
+        through: { attributes: [] },
       },
     ],
     limit: limit,

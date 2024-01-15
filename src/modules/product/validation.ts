@@ -10,6 +10,7 @@ export default {
         sku: Joi.string().trim().required(),
         reorderLevel: Joi.number().integer().required(),
         reorderQuantity: Joi.number().integer().required(),
+        tags: Joi.array().items(Joi.string()),
         // imagesUrl: Joi.array().items(Joi.string()).required(),
         description: Joi.string().required(),
         categoryId: Joi.string().required(),

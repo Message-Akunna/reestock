@@ -1,6 +1,7 @@
 import { Express, Request, Response, NextFunction } from "express";
 import { errorMessage } from "iyasunday";
 // modules
+import TagEndpoint from "../modules/tag";
 import UserEndpoint from "../modules/user";
 import ProductEndpoint from "../modules/product";
 import CategoryEndpoint from "../modules/category";
@@ -11,6 +12,7 @@ import { CustomError } from "../utils/interface";
 export default (app: Express) => {
   const apiVersion = "/v1";
   //
+  app.use(apiVersion, TagEndpoint);
   app.use(apiVersion, UserEndpoint);
   app.use(apiVersion, ProductEndpoint);
   app.use(apiVersion, CategoryEndpoint);

@@ -19,6 +19,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       // define association here
       Tag.belongsToMany(models.Product, {
         through: "product_tag",
+        as: "products",
         onDelete: "CASCADE",
       });
     }
